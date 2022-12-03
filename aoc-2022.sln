@@ -3,17 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "day1", "day1\day1.fsproj", "{EF8DD88E-5481-4D22-B3B6-E9FF35F53A4D}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "day1", "day1\day1.fsproj", "{EF8DD88E-5481-4D22-B3B6-E9FF35F53A4D}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "day2", "day2\day2.fsproj", "{64DB911E-967B-4501-AB22-04C5ECD3B220}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "day2", "day2\day2.fsproj", "{64DB911E-967B-4501-AB22-04C5ECD3B220}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "day3", "day3\day3.fsproj", "{AB8AD7D1-1C72-465F-AA70-74E2287F1083}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{EF8DD88E-5481-4D22-B3B6-E9FF35F53A4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -24,5 +23,15 @@ Global
 		{64DB911E-967B-4501-AB22-04C5ECD3B220}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{64DB911E-967B-4501-AB22-04C5ECD3B220}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{64DB911E-967B-4501-AB22-04C5ECD3B220}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB8AD7D1-1C72-465F-AA70-74E2287F1083}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB8AD7D1-1C72-465F-AA70-74E2287F1083}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB8AD7D1-1C72-465F-AA70-74E2287F1083}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB8AD7D1-1C72-465F-AA70-74E2287F1083}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EB175AB6-FEBE-4618-A676-688E76F2CBB7}
 	EndGlobalSection
 EndGlobal
