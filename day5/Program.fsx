@@ -19,20 +19,21 @@ let nbins =
     |> string
     |> int
 
-let lines = parseStarting starting
+let lines = parseStarting starting |> Array.rev
 
 let parseLine (l: string) bins =
     let mutable cur = l
     let mutable saved_bin = 0
 
-    while cur <> "" do
+    while (cur.Trim() <> "") do
         printfn "%s" cur
 
         let idx = cur.IndexOf('[')
         let letter = cur[idx + 1]
         let num = (idx / 4) + saved_bin
         printfn "%d %c" num letter
-        Array.set bins num ((Array.get bins num) @ [ letter ])
+        Array.set bins num ([ letter ] @ (Array.get bins num))
+        printfn "%s" ((Array.get bins num).ToString())
         cur <- cur[idx + 4 ..]
         saved_bin <- num + 1
 
@@ -49,7 +50,6 @@ let parseMove (m: string) =
     let count = arr[1] |> int
     let fromBin = arr[3] |> int |> (fun c -> c - 1)
     let toBin = arr[5] |> int |> (fun c -> c - 1)
-    printfn "%d %d %d" count fromBin toBin
     (count, fromBin, toBin)
 
 let parseMoves (ms: string) =
@@ -62,14 +62,20 @@ let moves = parseMoves moves_raw
 for (count, fromBin, toBin) in moves do
     //let (count, fromBin, toBin) = moves[0]
     let bin = state[fromBin]
+    let cnt = min count bin.Length
     let kept = List.removeManyAt 0 count bin
     Array.set state fromBin kept
     let moved = bin[0 .. count - 1]
+    // needed for task 1 execution to flip order preserving stack transfer
+    // |> List.rev
     Array.set state toBin (moved @ state[toBin])
+//printfn "FROM: %s" ((Array.get state fromBin).ToString())
+//printfn "TO: %s" ((Array.get state toBin).ToString())
+
 
 let final = state
 
 final
 |> Array.map List.head
 |> Array.map string
-|> Array.fold (fun acc s -> s + acc) ""
+|> Array.fold (fun acc s -> acc + s) ""
