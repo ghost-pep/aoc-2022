@@ -12,7 +12,7 @@ let msgs =
 
 type INode =
     | Directory of Map<string, INode>
-    | File of string * int
+    | File of int
 
 let emptyNode = Directory(Map.empty)
 
@@ -32,35 +32,33 @@ let (|Prefix|_|) (p: string) (s: string) =
 
 let parseListing line =
     match line with
-    | Prefix "dir " name -> Directory(Map [ (name, emptyNode) ])
+    | Prefix "dir " name -> (name, emptyNode)
     | x ->
         let sp = x.Split(' ')
         let size = sp[0] |> int
         let name = sp[1]
-        File(name, size)
+        (name, File(size))
 
 let rec parseLS (pwd: string list, fs) out =
-    let fwdPwd = pwd |> List.rev
-
-    match fwdPwd with
+    match pwd |> List.rev with
     | [ dir ] ->
-        let children =
-            out
-            |> Seq.map (fun listing -> (dir, parseListing listing))
+        let children = out |> Seq.map parseListing |> Map
 
-        (pwd, Directory(Map children))
+        match fs with
+        | Directory m ->
+            let node = m.Add(dir, Directory children)
+            (pwd, Directory node)
     | dir :: path ->
         match fs with
         | Directory m ->
             let node =
                 m
                 |> Map.find dir
-                |> fun oldfs -> parseLS (path, oldfs) out
+                |> fun oldfs -> parseLS (path |> List.rev, oldfs) out
                 |> fun (_, newfs) -> m.Add(dir, newfs)
                 |> Directory
 
             (pwd, node)
-
 
 
 let parseMsg state (msg: string) =
@@ -74,4 +72,4 @@ let parseMsg state (msg: string) =
 
 let parseMsgs msgs = msgs |> Seq.fold parseMsg ([], emptyFs)
 
-msgs |> Seq.take 2 |> parseMsgs
+msgs |> parseMsgs
