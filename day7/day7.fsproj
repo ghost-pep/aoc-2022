@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="test.txt" />
     <Content Include="input.txt" />
     <Compile Include="Program.fsx" />
   </ItemGroup>

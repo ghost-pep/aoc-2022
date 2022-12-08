@@ -5,6 +5,13 @@
         .ReadAllText($"{__SOURCE_DIRECTORY__}/input.txt")
         .Trim()
 
+let test =
+    System
+        .IO
+        .File
+        .ReadAllText($"{__SOURCE_DIRECTORY__}/test.txt")
+        .Trim()
+
 let msgs =
     input.Split("$")
     |> Array.tail
@@ -72,4 +79,41 @@ let parseMsg state (msg: string) =
 
 let parseMsgs msgs = msgs |> Seq.fold parseMsg ([], emptyFs)
 
-msgs |> parseMsgs
+let fs = msgs |> parseMsgs |> snd
+
+let rec dirSize dir =
+    match dir with
+    | Directory m -> m.Values |> Seq.map dirSize |> Seq.sum
+    | File size -> size
+
+let rec allDirs dir =
+    match dir with
+    | Directory m ->
+        let childDirs =
+            m.Values
+            |> Seq.map allDirs
+            |> List.ofSeq
+            |> List.concat
+
+        dir :: childDirs
+    | File _ -> []
+
+let systemTot = 70000000
+let systemAvail = 30000000
+let goalTot = systemTot - systemAvail
+let tot = fs |> dirSize
+
+let part1 =
+    fs
+    |> allDirs
+    |> Seq.map dirSize
+    |> Seq.filter (fun s -> s <= 100000)
+    |> Seq.sum
+
+let part2 =
+    fs
+    |> allDirs
+    |> Seq.map dirSize
+    |> Seq.filter (fun sz -> tot - sz < goalTot)
+    |> Seq.sort
+    |> Seq.head
