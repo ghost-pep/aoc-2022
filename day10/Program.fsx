@@ -16,7 +16,7 @@ type Instruction =
     | Add of int
     | Add2 of int
 
-type State = { Cycle: int; X: int }
+type State = { X: int }
 
 let parseLine (line: string) =
     match line with
@@ -28,17 +28,28 @@ let parse (input: string) =
     |> List.ofArray
     |> List.map parseLine
 
-let rec runInstruction state instruction =
+let rec runInstruction states instruction =
     match instruction with
-    | Noop -> { state with Cycle = state.Cycle + 1 }
-    | Add x -> runInstruction { state with Cycle = state.Cycle + 1 } (Add2 x)
+    | Noop -> List.head states :: states
+    | Add x -> runInstruction (List.head states :: states) (Add2 x)
     | Add2 x ->
-        { state with
-            Cycle = state.Cycle + 1
-            X = state.X + x }
+        let newState = List.head states
+        { newState with X = newState.X + x } :: states
 
 let run instructions =
     instructions
-    |> List.fold runInstruction { Cycle = 1; X = 1 }
+    |> List.fold runInstruction [ { X = 1 } ]
 
-parse input |> List.take 3 |> run
+let sumStates (states: State list) =
+    let interestingIdxs = [ 20; 60; 100; 140; 180; 220 ]
+    let reversed = states |> List.rev
+
+    interestingIdxs
+    |> List.map (fun idx -> List.tryItem (idx - 1) reversed) // subtract by 1 for 0 based indexing
+    |> List.map (Option.defaultValue { X = 0 })
+    |> List.map (fun s -> s.X)
+    |> List.zip interestingIdxs
+    |> List.map (fun (cycle, x) -> cycle * x)
+    |> List.sum
+
+parse input |> run |> sumStates
